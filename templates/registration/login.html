@@ -1,0 +1,30 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<section id="form"><!--form-->
+    <div class="container">
+        <div class="row">
+            <div class="col-5 offset-3">
+
+
+                <div class="reg-form"><!--sign up form-->
+                    <h2>User login!</h2>
+                    <form action="#" method="post">
+                        {% csrf_token %}
+                        {% for field in form %}
+
+                            <label for="">{{field.label_tag}}</label>
+								{{ field }}
+                        {{ field.errors }}
+							{% endfor %}
+                        <a href="" style="float:right;">Forgot Password ?</a>
+                        <button class="signup-btn btn btn-primary" type="submit">Login</button>
+                        <br>
+                        <a href="{% url 'signup' %}" style="color:black;margin-left:120px">Create your account --></a>
+                    </form>
+                </div><!--/sign up form-->
+            </div>
+        </div>
+    </div>
+</section><!--/form-->
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<section id="form"><!--form-->
+		<div class="container">
+			<div class="row">
+            <div class="col-5 offset-3">
+
+
+					<div class="reg-form"><!--sign up form-->
+						<h2>New User Signup!</h2>
+						<form action="#" method="post" class="reg-form">
+							{% csrf_token %}
+							{% for field in form %}
+
+								{{ field }}
+							{{ field.errors }}
+							{% endfor %}
+							<button class="signup-btn btn btn-primary btn-lg" type="submit">Signup</button>
+							<br>
+							<span>Already have an Acoount ? </span><a href="{% url 'login' %}">Login</a>
+						</form>
+					</div><!--/sign up form-->
+				</div>
+            </div>
+		</div>
+	</section><!--/form-->
+{% endblock %}
