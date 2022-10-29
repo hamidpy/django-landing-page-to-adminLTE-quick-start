@@ -1,4 +1,4 @@
-# django-landing-page-to-adminLTE-quick-start
+# Django landing page to adminLTE quick start
 This is very simple Django work. you can use it as a quick template.  there has some functionality.  
 >> registration.
 >> login.  
