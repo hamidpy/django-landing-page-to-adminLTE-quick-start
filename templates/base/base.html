@@ -4,38 +4,67 @@
         {% load static %}
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Landing Page - Start Bootstrap Theme</title>
-        <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-        <!-- Bootstrap icons-->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" type="text/css" />
-        <!-- Google fonts-->
-        <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css" />
-        <!-- Core theme CSS (includes Bootstrap)-->
+        <meta name="description" content="Premium window replacement services. Affordable, energy-efficient, and stylish solutions to enhance your home's look and functionality." />
+        <meta name="keywords" content="window replacement, energy-efficient windows, custom windows, stylish windows, home improvement, free window quote" />
+        <meta name="author" content="Your Company Name" />
+        <meta name="robots" content="index, follow" />
+
+        <title>Window Replacement Services</title>
+        
+        <!-- Favicon -->
+        <link rel="icon" type="image/x-icon" href="{% static 'assets/favicon.ico' %}" />
+
+        <!-- Bootstrap Icons -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet" />
+
+        <!-- Google Fonts -->
+        <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+
+        <!-- Core Theme CSS -->
         <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+
+        <!-- OverlayScrollbars -->
+        <link rel="stylesheet" href="{% static 'admin/plugins/overlayScrollbars/css/OverlayScrollbars.min.css' %}">
+
+        <!-- AdminLTE -->
+        <link rel="stylesheet" href="{% static 'admin/dist/css/adminlte.min.css' %}">
     </head>
-    <body>
-<!-- header main -->
-{% include 'includes/header.html' %}
+    <body class="hold-transition sidebar-mini layout-fixed">
+        <div class="wrapper">
+            <!-- Sidebar (only include if user is authenticated) -->
+            {% if user.is_authenticated %}
+                {% include 'includes/adminsidebar.html' %}
+            {% endif %}
+            
+            <!-- Header -->
+            {% include 'includes/header.html' %}
 
-    {% block content %}
+            <!-- Main Content -->
+            <main class="content-wrapper">
+                {% block content %}
+                {% endblock %}
+            </main>
 
-    {% endblock %}
+            <!-- Footer -->
+            {% include 'includes/footer.html' %}
+        </div>
 
-    <!-- Main footer -->
-{% include 'includes/footer.html' %}
-
-
-            <!-- Bootstrap core JS-->
+        <!-- Bootstrap core JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Core theme JS-->
-        <script src="{% static 'js/scripts.js"></script>
-        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-        <!-- * *                               SB Forms JS                               * *-->
-        <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
-        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js' %}"></script>
+
+        <!-- OverlayScrollbars JS -->
+        <script src="{% static 'admin/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js' %}"></script>
+
+        <!-- AdminLTE App -->
+        <script src="{% static 'admin/dist/js/adminlte.js' %}"></script>
+
+        <!-- Core theme JS -->
+        <script src="{% static 'js/scripts.js' %}"></script>
+
+        <!-- Chatbot Integration -->
+        <script>
+            // Example Chatbot script placeholder
+            console.log('Chatbot script goes here');
+        </script>
     </body>
 </html>

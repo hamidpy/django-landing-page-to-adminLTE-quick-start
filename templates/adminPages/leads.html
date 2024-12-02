@@ -1,0 +1,10 @@
+<!-- templates/adminPages/leads.html -->
+<h1>Leads</h1>
+<ul>
+    {% for lead in leads %}
+        <li>{{ lead.name }} - {{ lead.email }}</li>
+    {% empty %}
+        <li>No leads available.</li>
+    {% endfor %}
+</ul>
+

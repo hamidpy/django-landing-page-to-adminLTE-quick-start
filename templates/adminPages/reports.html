@@ -1,0 +1,43 @@
+{% extends 'base/adminbase.html' %}
+{% block content %}
+<div class="content-wrapper">
+    <!-- Header Section -->
+    <div class="content-header">
+        <h1 class="m-0">Reports</h1>
+        <p class="text-muted">View and analyze your reports.</p>
+    </div>
+
+    <!-- Reports Content -->
+    <div class="content">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-chart-line"></i> Reports</h3>
+            </div>
+            <div class="card-body">
+                {% if report_data %}
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Report Title</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for report in report_data %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ report.title }}</td>
+                            <td>{{ report.details }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p>No reports available.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

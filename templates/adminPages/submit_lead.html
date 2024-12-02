@@ -1,0 +1,64 @@
+{% extends 'base/adminbase.html' %}
+{% block content %}
+<div class="content-wrapper">
+    <!-- Page Header -->
+    <div class="content-header">
+        <h1 class="m-0">Submit Lead</h1>
+        <p class="text-muted">Fill out the form below to submit a lead.</p>
+    </div>
+
+    <!-- Success/Error Messages -->
+    {% if messages %}
+        <div>
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Lead Form -->
+    <div class="content">
+        <form method="POST" action="{% url 'submit_lead' %}">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" class="form-control" placeholder="Enter your name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Phone:</label>
+                <input type="text" id="phone" name="phone" class="form-control" placeholder="Enter your phone number" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="service">Service:</label>
+                <select id="service" name="service" class="form-control" required>
+                    <option value="" disabled selected>Select a Service</option>
+                    <option value="Window Replacement">Window Replacement</option>
+                    <option value="Door Installation">Door Installation</option>
+                    <option value="General Inquiry">General Inquiry</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="status">Status:</label>
+                <select id="status" name="status" class="form-control" required>
+                    <option value="new">New</option>
+                    <option value="contacted">Contacted</option>
+                    <option value="converted">Converted</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
