@@ -1,31 +1,61 @@
-{% extends 'base/base.html' %}
+
+{% extends "base/base.html" %}
 {% load static %}
+
+{% block head %}
+<meta property="og:title" content="Upgrade Your Home with Energy-Efficient Windows">
+<meta property="og:description" content="Affordable, stylish, and durable window replacement services. Get a free quote today!">
+<meta property="og:image" content="{% static 'assets/img/window-og-image.jpg' %}">
+<meta property="og:url" content="https://www.yourwebsite.com">
+<meta property="og:type" content="website">
+{% endblock %}
 
 {% block content %}
 <!-- Masthead-->
 <header class="masthead">
     <div class="container position-relative">
+        <nav class="navbar">
+    
+        </nav>
         <div class="row justify-content-center">
             <div class="col-xl-6">
                 <div class="text-center text-white">
                     <!-- Page heading-->
                     <h1 class="mb-5">Upgrade Your Home with Energy-Efficient Windows!</h1>
                     <p class="mb-4">Our premium window replacement services combine style, affordability, and durability. Get started today!</p>
-                    <!-- Signup form-->
-                    <form class="form-subscribe" action="/submit-lead/" method="post" id="leadForm">
+                    <!-- Quick Lead Form -->
+                    {% if messages %}
+                    <div>
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <form class="form-subscribe" action="{% url 'submit_lead' %}" method="post" id="quickLeadForm">
                         {% csrf_token %}
-                        <div class="row">
+                        <div class="row flex">
+                            <!-- Email Address Field -->
                             <div class="col">
-                                <input class="form-control form-control-lg" id="name" name="name" type="text" placeholder="Full Name" required>
+                                <input
+                                    class="form-control form-control-lg {% if form.email.errors %}is-invalid{% endif %}"
+                                    id="email"
+                                    name="email"
+                                    type="email"
+                                    placeholder="Email Address"
+                                    required
+                                />
+                                {% if form.email.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.email.errors %}
+                                    {{ error }}
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
                             </div>
-                            <div class="col">
-                                <input class="form-control form-control-lg" id="email" name="email" type="email" placeholder="Email Address" required>
-                            </div>
-                            <div class="col">
-                                <input class="form-control form-control-lg" id="phone" name="phone" type="tel" placeholder="Phone Number" required>
-                            </div>
+                            <!-- Submit Button on the Side -->
                             <div class="col-auto">
-                                <button class="btn btn-primary btn-lg" id="submitButton" type="submit">Request a Quote</button>
+                                <button class="btn btn-primary btn-lg" type="submit">Submit</button>
                             </div>
                         </div>
                     </form>
@@ -34,6 +64,71 @@
         </div>
     </div>
 </header>
+
+<!-- Horizontal Image Gallery -->
+<section class="image-gallery">
+    <div class="container">
+        <h2 class="text-center mb-4">Explore Our Window Options</h2>
+        <div class="row g-3">
+            <!-- Image 1 -->
+            <div class="col-md-3 col-sm-6">
+                <div class="image-box">
+                    <img src="{% static 'assets/img/window-1.jpg' %}" alt="Double Hung Window" class="img-fluid" loading="lazy">
+                    <p class="text-center mt-2">Double Hung</p>
+                </div>
+            </div>
+            <!-- Image 2 -->
+            <div class="col-md-3 col-sm-6">
+                <div class="image-box">
+                    <img src="{% static 'assets/img/window-2.jpg' %}" alt="Casement Window" class="img-fluid" loading="lazy">
+                    <p class="text-center mt-2">Casement</p>
+                </div>
+            </div>
+            <!-- Image 3 -->
+            <div class="col-md-3 col-sm-6">
+                <div class="image-box">
+                    <img src="{% static 'assets/img/window-3.jpg' %}" alt="Sliding Window" class="img-fluid" loading="lazy">
+                    <p class="text-center mt-2">Sliding</p>
+                </div>
+            </div>
+            <!-- Image 4 -->
+            <div class="col-md-3 col-sm-6">
+                <div class="image-box">
+                    <img src="{% static 'assets/img/window-4.jpg' %}" alt="Picture Window" class="img-fluid" loading="lazy">
+                    <p class="text-center mt-2">Picture</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+ 
+<!-- Showcase Section with Two Big Window Images -->
+<section class="showcase">
+    <div class="container-fluid p-0">
+        <!-- Big Window Image 1 -->
+        <div class="row g-0">
+            <div class="col-lg-6 order-lg-2 text-white showcase-img">
+                <img src="{% static 'assets/img/home-window.jpeg' %}" alt="Home Window" class="img-fluid" loading="lazy">
+            </div>
+            <div class="col-lg-6 order-lg-1 my-auto showcase-text">
+                <h2>Stylish Window Designs</h2>
+                <p class="lead mb-0">Enhance your home’s aesthetic with our wide range of stylish and modern window designs.</p>
+            </div>
+        </div>
+        <!-- Big Window Image 2 -->
+        <div class="row g-0">
+            <div class="col-lg-6 text-white showcase-img">
+                <img src="{% static 'assets/img/window-worker.jpeg' %}" alt="Window Worker" class="img-fluid" loading="lazy">
+            </div>
+            <div class="col-lg-6 my-auto showcase-text">
+                <h2>Energy-Efficient Windows</h2>
+                <p class="lead mb-0">Upgrade to energy-efficient windows that reduce your utility bills and keep your home comfortable year-round.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- Features Section -->
 <section class="features-icons bg-light text-center">
     <div class="container">
@@ -62,111 +157,60 @@
         </div>
     </div>
 </section>
-<!-- Horizontal Image Gallery -->
-<section class="image-gallery">
-    <div class="container">
-        <h2 class="text-center mb-4">Explore Our Window Options</h2>
-        <div class="row g-3">
-            <!-- Image 1 -->
-            <div class="col-md-3 col-sm-6">
-                <div class="image-box">
-                    <img src="{% static 'assets/img/window-1.jpg' %}" alt="Double Hung Window" class="img-fluid">
-                    <p class="text-center mt-2">Double Hung</p>
-                </div>
-            </div>
-            <!-- Image 2 -->
-            <div class="col-md-3 col-sm-6">
-                <div class="image-box">
-                    <img src="{% static 'assets/img/window-2.jpg' %}" alt="Casement Window" class="img-fluid">
-                    <p class="text-center mt-2">Casement</p>
-                </div>
-            </div>
-            <!-- Image 3 -->
-            <div class="col-md-3 col-sm-6">
-                <div class="image-box">
-                    <img src="{% static 'assets/img/window-3.jpg' %}" alt="Sliding Window" class="img-fluid">
-                    <p class="text-center mt-2">Sliding</p>
-                </div>
-            </div>
-            <!-- Image 4 -->
-            <div class="col-md-3 col-sm-6">
-                <div class="image-box">
-                    <img src="{% static 'assets/img/window-4.jpg' %}" alt="Bay/Bow Window" class="img-fluid">
-                    <p class="text-center mt-2">Bay/Bow</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- Image Showcase Section -->
-<section class="showcase">
-    <div class="container-fluid p-0">
-        <div class="row g-0">
-            <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('{% static 'assets/img/window-1.jpg' %}')"></div>
-            <div class="col-lg-6 order-lg-1 my-auto showcase-text">
-                <h2>Custom Window Installation</h2>
-                <p class="lead mb-0">Our team installs custom-designed windows in as little as 48 hours, with satisfaction guaranteed!</p>
-            </div>
-        </div>
-        <div class="row g-0">
-            <div class="col-lg-6 text-white showcase-img" style="background-image: url('{% static 'assets/img/window-2.jpg' %}')"></div>
-            <div class="col-lg-6 my-auto showcase-text">
-                <h2>Stylish and Functional</h2>
-                <p class="lead mb-0">Our windows not only enhance the appearance of your home but also improve energy efficiency.</p>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- Detailed Request a Quote Section -->
-<section class="detailed-request-quote bg-light text-center">
-    <div class="container">
-        <h2 class="mb-4">Get Your Custom Window Replacement Quote</h2>
-        <p class="mb-4">Provide detailed information to help us understand your requirements better.</p>
-        <form id="detailedQuoteForm" action="#" method="post">
+
+<div class="container d-flex justify-content-center mt-5">
+    <div class="quote-form-wrapper">
+        
+        <!-- Detailed Quote Request Form -->
+        <form class="form-quote" action="{% url 'submit_quote' %}" method="post">
+            {% csrf_token %}
             <div class="row g-3">
-                <!-- Full Name -->
+                <!-- Name -->
                 <div class="col-md-6">
-                    <input type="text" class="form-control" placeholder="Full Name" name="name" required>
+                    <input class="form-control form-control-lg" id="name" name="name" type="text" placeholder="Your Name" required>
                 </div>
-                <!-- Email Address -->
+                <!-- Email -->
                 <div class="col-md-6">
-                    <input type="email" class="form-control" placeholder="Email Address" name="email" required>
+                    <input class="form-control form-control-lg" id="email" name="email" type="email" placeholder="Your Email" required>
                 </div>
-                <!-- Phone Number -->
+                <!-- Phone -->
                 <div class="col-md-6">
-                    <input type="tel" class="form-control" placeholder="Phone Number" name="phone" required>
+                    <input class="form-control form-control-lg" id="phone" name="phone" type="text" placeholder="Your Phone Number" required>
                 </div>
-                <!-- Address -->
+                <!-- Requested Service -->
                 <div class="col-md-6">
-                    <input type="text" class="form-control" placeholder="Address (Optional)" name="address">
-                </div>
-                <!-- Preferred Installation Date -->
-                <div class="col-md-6">
-                    <input type="date" class="form-control" name="installation_date">
+                    <input class="form-control form-control-lg" id="service" name="service" type="text" placeholder="Requested Service" required>
                 </div>
                 <!-- Type of Windows -->
-                <div class="col-md-6">
-                    <select class="form-select" name="window_type" required>
+                <div class="col-md-6 offset-md-6 mt-3">
+                    <select class="form-select form-control-lg" id="windowType" name="windowType" required>
                         <option value="" disabled selected>Select Type of Window</option>
                         <option value="double_hung">Double Hung</option>
                         <option value="casement">Casement</option>
                         <option value="sliding">Sliding</option>
-                        <option value="bay_bow">Bay/Bow</option>
+                        <option value="bay_bow">Picture</option>
                         <option value="custom">Custom</option>
                     </select>
                 </div>
                 <!-- Additional Details -->
-                <div class="col-12">
+                <div class="col-12 mt-3">
                     <textarea class="form-control" placeholder="Additional Details (Optional)" name="details" rows="4"></textarea>
                 </div>
                 <!-- Submit Button -->
-                <div class="col-12">
-                    <button type="submit" class="btn btn-primary btn-lg w-100">Request Detailed Quote</button>
+                <div class="col-12 mt-3">
+                    <button type="submit" class="btn btn-primary btn-lg w-100">Submit Quote</button>
                 </div>
             </div>
         </form>
     </div>
-</section>
+</div>
+</form>
+
+
+<!-- Confirmation Message -->
+<div id="quote-confirmation" style="display:none;" class="alert alert-success mt-2">
+    Quote request sent successfully!
+</div>
 
 <!-- Testimonials Section -->
 <section class="testimonials text-center bg-light">
@@ -176,25 +220,24 @@
             <!-- Testimonial 1 -->
             <div class="col-lg-4">
                 <div class="testimonial-item mx-auto mb-5 mb-lg-0">
-                    <img class="img-fluid rounded-circle mb-3" src="{% static 'assets/img/testimonials-1.jpg' %}" alt="Testimonial 1">
-
-                    <h5>John D., New York</h5>
+                    <img class="img-fluid rounded-circle mb-3" src="{% static 'assets/img/testimonials-1.jpg' %}" alt="Testimonial 1" loading="lazy">
+                    <h5>Lisa M., New York</h5>
                     <p class="font-weight-light mb-0">"The windows are beautiful and energy-efficient. My home feels warmer already!"</p>
                 </div>
             </div>
             <!-- Testimonial 2 -->
             <div class="col-lg-4">
                 <div class="testimonial-item mx-auto mb-5 mb-lg-0">
-                    <img class="img-fluid rounded-circle mb-3" src="{% static 'assets/img/testimonials-2.jpg' %}" alt="Testimonial 2">
-                    <h5>Lisa M., California</h5>
+                    <img class="img-fluid rounded-circle mb-3" src="{% static 'assets/img/testimonials-2.jpg' %}" alt="Testimonial 2" loading="lazy">
+                    <h5>John D., California</h5>
                     <p class="font-weight-light mb-0">"Fast installation and excellent service. My windows look amazing!"</p>
                 </div>
             </div>
             <!-- Testimonial 3 -->
             <div class="col-lg-4">
                 <div class="testimonial-item mx-auto">
-                    <img class="img-fluid rounded-circle mb-3" src="{% static 'assets/img/testimonials-3.jpg' %}" alt="Testimonial 3">
-                    <h5>Michael S., Texas</h5>
+                    <img class="img-fluid rounded-circle mb-3" src="{% static 'assets/img/testimonials-3.jpg' %}" alt="Testimonial 3" loading="lazy">
+                    <h5>Wendy S., Georgia</h5>
                     <p class="font-weight-light mb-0">"Very professional team. My home has never looked better with these windows!"</p>
                 </div>
             </div>

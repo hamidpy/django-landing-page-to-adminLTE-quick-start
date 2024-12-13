@@ -1,0 +1,41 @@
+<!-- Detailed Quote Request Form -->
+<form method="POST" action="{% url 'submit-quote' %}">
+    {% csrf_token %}
+    <div class="row g-3">
+        <!-- Name -->
+        <div class="col-md-6">
+            <input class="form-control form-control-lg" id="name" name="name" type="text" placeholder="Your Name" required>
+        </div>
+        <!-- Email -->
+        <div class="col-md-6">
+            <input class="form-control form-control-lg" id="email" name="email" type="email" placeholder="Your Email" required>
+        </div>
+        <!-- Phone -->
+        <div class="col-md-6">
+            <input class="form-control form-control-lg" id="phone" name="phone" type="text" placeholder="Your Phone Number" required>
+        </div>
+        <!-- Requested Service -->
+        <div class="col-md-6">
+            <input class="form-control form-control-lg" id="service" name="service" type="text" placeholder="Requested Service" required>
+        </div>
+        <!-- Type of Windows -->
+        <div class="col-md-6 offset-md-6 mt-3">
+            <select class="form-select form-control-lg" id="windowType" name="windowType" required>
+                <option value="" disabled selected>Select Type of Window</option>
+                <option value="double_hung">Double Hung</option>
+                <option value="casement">Casement</option>
+                <option value="sliding">Sliding</option>
+                <option value="bay_bow">Picture</option>
+                <option value="custom">Custom</option>
+            </select>
+        </div>
+        <!-- Additional Details -->
+        <div class="col-12 mt-3">
+            <textarea class="form-control" placeholder="Additional Details (Optional)" name="details" rows="4"></textarea>
+        </div>
+        <!-- Submit Button -->
+        <div class="col-12 mt-3">
+            <button type="submit" class="btn btn-primary btn-lg w-100">Submit Quote</button>
+        </div>
+    </div>
+</form>

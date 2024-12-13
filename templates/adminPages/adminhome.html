@@ -1,140 +1,151 @@
-{% extends 'base/adminbase.html' %}
+{% extends "base/adminbase.html" %}
 {% load static %}
+
 {% block content %}
-<div class="content-wrapper">
-    <!-- Header -->
-    <div class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1 class="m-0">Window Replacement Dashboard</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Dashboard</li>
-                    </ol>
-                </div>
+<!-- Page Header -->
+{% include 'includes/adminsidebar.html' %}
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">{{ project_name }} Dashboard</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{% url 'useradmin' %}">Home</a></li>
+                    <li class="breadcrumb-item active">Dashboard</li>
+                </ol>
             </div>
         </div>
     </div>
-
+</div>
     <!-- Main Content -->
     <section class="content">
         <div class="container-fluid">
-            <!-- Key Metrics -->
-            <div class="row">
-                <div class="col-lg-3 col-6">
-                    <div class="small-box bg-primary">
-                        <div class="inner">
-                            <h3>{{ total_quotes }}</h3>
-                            <p>Total Quotes Requested</p>
+            
+        <!-- Key Metrics -->
+        <div class="row">
+            <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+                <a href="{% url 'leads' %}">
+                    <div class="card bg-info text-white shadow">
+                        <div class="card-body text-center">
+                            <h4><i class="fas fa-user-plus"></i> New Leads</h4>
+                            <h3>{{ metrics.new_leads_count }}</h3>
                         </div>
-                        <div class="icon">
-                            <i class="fas fa-file-invoice"></i>
-                        </div>
-                        <span class="small-box-footer">Overview</span>
                     </div>
-                </div>
-                <div class="col-lg-3 col-6">
-                    <div class="small-box bg-warning">
-                        <div class="inner">
-                            <h3>{{ orders_in_progress }}</h3>
-                            <p>Orders in Progress</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fas fa-tasks"></i>
-                        </div>
-                        <span class="small-box-footer">Manage</span>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-6">
-                    <div class="small-box bg-success">
-                        <div class="inner">
-                            <h3>{{ sales_completed }}</h3>
-                            <p>Sales Completed</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fas fa-check"></i>
-                        </div>
-                        <span class="small-box-footer">Details</span>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-6">
-                    <div class="small-box bg-info">
-                        <div class="inner">
-                            <h3>${{ monthly_revenue|floatformat:2 }}</h3>
-                            <p>Monthly Revenue</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fas fa-dollar-sign"></i>
-                        </div>
-                        <span class="small-box-footer">Revenue</span>
-                    </div>
-                </div>
+                </a>
             </div>
-
-            <!-- Popular Window Styles -->
-            <div class="card mt-4">
-                <div class="card-header">
-                    <h3 class="card-title"><i class="fas fa-window-restore"></i> Popular Window Styles</h3>
-                </div>
-                <div class="card-body">
-                    <ul>
-                        {% for style in popular_window_styles %}
-                            <li>{{ style.window_style }} ({{ style.style_count }} orders)</li>
-                        {% empty %}
-                            <li>No data available</li>
-                        {% endfor %}
-                    </ul>
-                </div>
+            <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+                <a href="{% url 'inbox' %}">
+                    <div class="card bg-primary text-white shadow">
+                        <div class="card-body text-center">
+                            <h4><i class="fas fa-envelope"></i> Inbox</h4>
+                            <h3>{{ metrics.unread_messages_count }}</h3>
+                        </div>
+                    </div>
+                </a>
             </div>
-
+            <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+                <a href="{% url 'pending_orders' %}">
+                    <div class="card bg-warning text-white shadow">
+                        <div class="card-body text-center">
+                            <h4><i class="fas fa-shopping-cart"></i> Pending Orders</h4>
+                            <h3>{{ metrics.pending_orders_count }}</h3>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+                <a href="{% url 'projects' %}">
+                    <div class="card bg-success text-white shadow">
+                        <div class="card-body text-center">
+                            <h4><i class="fas fa-check-circle"></i> Completed Projects</h4>
+                            <h3>{{ metrics.completed_projects_count }}</h3>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+                <a href="{% url 'revenue' %}">
+                    <div class="card bg-primary text-white shadow">
+                        <div class="card-body text-center">
+                            <h4><i class="fas fa-dollar-sign"></i> Monthly Revenue</h4>
+                            <h3>${{ metrics.monthly_revenue|floatformat:2 }}</h3>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <!-- Conversion Rate -->
+<div class="row">
+    <div class="col-lg-4 col-md-6 mb-3">
+        <div class="small-box bg-secondary text-white shadow">
+            <div class="inner text-center">
+                <h4>Conversion Rate</h4>
+                <h2>{{ metrics.conversion_rate }}%</h2>
+            </div>
+            <div class="icon">
+                <i class="fas fa-percentage"></i>
+            </div>
+        </div>
+    </div>
+</div>
             <!-- Leads Section -->
-            <div class="card mt-4">
-                <div class="card-header">
-                    <h3 class="card-title"><i class="fas fa-user-plus"></i> Leads</h3>
+            <div class="card mt-4 shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title"><i class="fas fa-user-plus"></i> Recent Leads</h3>
                 </div>
                 <div class="card-body">
-                    <ul>
-                        {% for lead in leads %}
-                            <li>{{ lead.name }} - {{ lead.email }}</li>
-                        {% empty %}
-                            <p>No leads available.</p>
-                        {% endfor %}
-                    </ul>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Status</th>
+                                    <th>Created At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for lead in leads %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ lead.name }}</td>
+                                        <td>{{ lead.email }}</td>
+                                        <td>{{ lead.phone }}</td>
+                                        <td>{{ lead.status|title }}</td>
+                                        <td>{{ lead.created_at|date:"d M Y H:i" }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="6" class="text-center">No leads found</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Orders Section -->
-            <div class="card mt-4">
-                <div class="card-header">
-                    <h3 class="card-title"><i class="fas fa-shopping-cart"></i> Orders</h3>
-                </div>
-                <div class="card-body">
-                    <ul>
-                        {% for order in orders %}
-                            <li>Order #{{ order.id }} - {{ order.status }} - ${{ order.amount }}</li>
-                        {% empty %}
-                            <p>No orders available.</p>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Quotes Section -->
-            <div class="card mt-4">
-                <div class="card-header">
-                    <h3 class="card-title"><i class="fas fa-file-invoice"></i> Quotes</h3>
-                </div>
-                <div class="card-body">
-                    <ul>
-                        {% for quote in quotes %}
-                            <li>{{ quote.name }} requested a quote</li>
-                        {% empty %}
-                            <p>No quotes available.</p>
-                        {% endfor %}
-                    </ul>
+                <div class="card-footer">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                            {% if leads.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ leads.previous_page_number }}">Previous</a>
+                                </li>
+                            {% endif %}
+                            <li class="page-item disabled">
+                                <span class="page-link">Page {{ leads.number }} of {{ leads.paginator.num_pages }}</span>
+                            </li>
+                            {% if leads.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ leads.next_page_number }}">Next</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
                 </div>
             </div>
 
@@ -150,20 +161,18 @@
         </div>
     </section>
 </div>
-
-<!-- Sales Chart Script -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var ctx = document.getElementById('sales-chart').getContext('2d');
         var salesChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: {{ sales_chart_labels|safe }},  // Dynamic labels
+                labels: {{ metrics.sales_chart_labels|safe }},
                 datasets: [{
-                    label: 'Sales ($)',
-                    data: {{ sales_chart_data|safe }},  // Dynamic data
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
+                    label: 'Revenue ($43,300.33)',
+                    data: {{ metrics.sales_chart_data|safe }},
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
                     borderWidth: 1
                 }]
             },
@@ -171,9 +180,7 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+                    y: { beginAtZero: true }
                 }
             }
         });

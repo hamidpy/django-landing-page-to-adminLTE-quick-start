@@ -1,15 +1,6 @@
-<!-- Navigation-->
+<!-- User Header (userheader.html) -->
 <nav class="navbar navbar-light bg-light static-top">
     <div class="container">
-        <a class="navbar-brand" href="#!">Start Bootstrap</a>
-        {% if user.is_authenticated %}
-        <a class="navbar-brand" href="{% url 'useradmin' %}">Admin Panel</a>
-        {% endif %}
-        {% if user.is_authenticated %}
-        <a class="btn btn-primary" href="{% url 'logout' %}">Logout</a>
-
-        {% else %}
-        <a class="btn btn-primary" href="{% url 'login' %}">Log In</a>
-        {% endif %}
+        <a class="navbar-brand" href="#!">Window Services</a>
     </div>
 </nav>

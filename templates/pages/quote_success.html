@@ -1,0 +1,14 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Thank You!</h2>
+    <p class="text-center">Your quote request has been submitted successfully. We will contact you soon.</p>
+    
+    <!-- Add link to the Quote Success page -->
+    <div class="text-center mt-3">
+        <a href="{% url 'quote-success' %}" class="btn btn-primary">Reload Quote Success</a>
+        <a href="{% url 'index' %}" class="btn btn-secondary">Back to Home</a>
+    </div>
+</div>
+{% endblock %}

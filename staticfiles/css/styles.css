@@ -11607,3 +11607,101 @@ footer.footer {
   background-color: #0056b3;
   transform: translateY(-2px);
 }
+
+.small-box {
+  min-height: 150px; /* Ensure all boxes have the same height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.small-box .inner {
+  padding: 15px;
+}
+
+.small-box h3 {
+  font-size: 2rem;
+  margin: 0;
+}
+
+.small-box p {
+  font-size: 1rem;
+  margin: 5px 0 0;
+}
+
+.small-box .icon {
+  font-size: 3rem;
+  opacity: 0.8;
+  position: absolute;
+  right: 15px;
+  top: 15px;
+}
+
+.small-box {
+  height: 150px; /* Adjust as needed */
+}
+.small-box .inner {
+  padding: 10px; /* Adjust padding as needed */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.quote-form-wrapper {
+    max-width: 800px; /* Shrink the width of the form */
+    width: 100%; /* Ensure responsiveness */
+    padding: 30px; /* Add padding around the form */
+    background-color: #ffffff; /* Clean white background */
+    border: 1px solid #dddddd; /* Subtle border */
+    border-radius: 8px; /* Rounded corners for a modern look */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+}
+
+.container {
+    padding: 20px; /* Add some padding to the container */
+}
+
+.form-control,
+.form-select {
+    font-size: 1rem; /* Ensure the input fields look clean */
+}
+
+button {
+    font-size: 1rem; /* Ensure the button text is proportional */
+}
+
+.quote-form-wrapper {
+  max-width: 700px; /* Shrink the overall form width */
+  width: 100%; /* Ensure responsiveness */
+  padding: 20px; /* Add padding */
+  background-color: #ffffff; /* Clean white background */
+  border: 1px solid #e0e0e0; /* Subtle border */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+}
+
+.form-control,
+.form-select {
+  font-size: 0.9rem; /* Slightly smaller font size for a compact look */
+  padding: 8px 12px; /* Shrink the padding */
+}
+
+textarea.form-control {
+  resize: none; /* Prevent resizing */
+}
+
+button {
+  font-size: 0.9rem; /* Shrink button font size */
+  padding: 8px 20px; /* Smaller padding */
+  border-radius: 4px; /* Match button corners to form */
+}
+
+.alert {
+  max-width: 700px; /* Match the form's width */
+  margin: auto; /* Center the confirmation message */
+}
+
+
+<link href="{% static 'css/styles.css' %}" rel="stylesheet">
+

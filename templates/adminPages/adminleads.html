@@ -1,0 +1,77 @@
+{% extends 'base/adminbase.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4 text-center text-primary">Leads Management</h1>
+
+    <!-- Card Wrapper -->
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h3 class="card-title"><i class="fas fa-users"></i> Leads</h3>
+            <a href="{% url 'submit_lead' %}" class="btn btn-light btn-sm">
+                {% csrf_token %}
+                <i class="fas fa-plus"></i> Add Lead
+            </a>
+        </div>
+        <div class="card-body">
+            <!-- Table Container -->
+            <div class="table-responsive">
+                <table class="table table-striped table-hover table-bordered align-middle">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Service</th>
+                            <th>Status</th>
+                            <th>Created At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for lead in leads %}
+                        <tr>
+                            <!-- Sequential Number -->
+                            <td>{{ forloop.counter }}</td>
+                
+                            <!-- Lead Name -->
+                            <td>{{ lead.name }}</td>
+                
+                            <!-- Lead Email -->
+                            <td>{{ lead.email }}</td>
+                
+                            <!-- Lead Phone -->
+                            <td>{{ lead.phone }}</td>
+                
+                            <!-- Service -->
+                            <td>{{ lead.service|title }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                                <!-- Status with Dynamic Styling -->
+                                <td>
+                                    <span class="badge badge-pill 
+                                        {% if lead.status == 'new' %}badge-primary
+                                        {% elif lead.status == 'contacted' %}badge-warning
+                                        {% elif lead.status == 'converted' %}badge-success
+                                        {% else %}badge-secondary{% endif %}">
+                                        {{ lead.status|title }}
+                                    </span>
+                                </td>
+
+                                <!-- Created At -->
+                                <td>{{ lead.created_at|date:"d M Y H:i" }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="7" class="text-center text-muted">
+                                    <i class="fas fa-info-circle"></i> No leads available at the moment.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+   

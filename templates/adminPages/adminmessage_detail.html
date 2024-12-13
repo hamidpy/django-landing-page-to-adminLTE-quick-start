@@ -1,0 +1,65 @@
+{% extends 'base/adminbase.html' %}
+{% block content %}
+<div class="content-wrapper">
+    <!-- Header Section -->
+    <div class="content-header">
+        <h1 class="m-0">Message Details</h1>
+        <p class="text-muted">View the details of the selected message and take actions.</p>
+    </div>
+
+    <!-- Message Content -->
+    <div class="content">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">{{ message.subject }}</h3>
+            </div>
+            <div class="card-body">
+                <p><strong>From:</strong> {{ message.sender }}</p>
+                <p><strong>Received At:</strong> {{ message.created_at|date:"M d, Y H:i" }}</p>
+                <hr>
+                <p><strong>Content:</strong></p>
+                <p>{{ message.content }}</p>
+            </div>
+            <div class="card-footer d-flex justify-content-between">
+                <!-- Mark as Read -->
+                <form method="POST" action="{% url 'mark_message_read' message.id %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-check"></i> Mark as Read
+                    </button>
+                </form>
+                <!-- Delete Message -->
+                <form method="POST" action="{% url 'delete_message' message.id %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </form>
+                <!-- Back to Inbox -->
+                <a href="{% url 'inbox' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Inbox
+                </a>
+            </div>
+        </div>
+
+        <!-- Reply Section -->
+        <div class="card mt-4">
+            <div class="card-header bg-primary text-white">
+                <h3 class="card-title"><i class="fas fa-reply"></i> Reply to Message</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{% url 'reply_message' message.id %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="reply-content">Your Reply:</label>
+                        <textarea id="reply-content" name="reply_content" class="form-control" rows="4" placeholder="Write your reply here..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Send Reply
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

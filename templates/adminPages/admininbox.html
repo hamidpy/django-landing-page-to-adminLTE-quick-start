@@ -4,10 +4,10 @@
     <!-- Header -->
     <div class="content-header">
         <h1 class="m-0">Inbox</h1>
-        <p class="text-muted">View and manage messages.</p>
+        <p class="text-muted">View and manage messages and leads.</p>
     </div>
 
-    <!-- Inbox Table -->
+    <!-- Messages Table -->
     <div class="content">
         <div class="card">
             <div class="card-header">
@@ -41,6 +41,45 @@
                 </div>
                 {% else %}
                 <p class="text-center">No messages found.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Leads Table -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-user-plus"></i> Leads</h3>
+            </div>
+            <div class="card-body">
+                {% if leads %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Phone</th>
+                                <th scope="col">Service</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Created At</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for lead in leads %}
+                            <tr>
+                                <td>{{ lead.name }}</td>
+                                <td>{{ lead.email }}</td>
+                                <td>{{ lead.phone }}</td>
+                                <td>{{ lead.service }}</td>
+                                <td>{{ lead.status }}</td>
+                                <td>{{ lead.created_at|date:"d M Y H:i" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-center">No leads found.</p>
                 {% endif %}
             </div>
         </div>

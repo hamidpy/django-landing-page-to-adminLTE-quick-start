@@ -8,6 +8,10 @@
         <meta name="keywords" content="window replacement, energy-efficient windows, custom windows, stylish windows, home improvement, free window quote" />
         <meta name="author" content="Your Company Name" />
         <meta name="robots" content="index, follow" />
+        
+        <title>{% block title %}Admin Panel{% endblock %}</title>
+        
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
         <title>Window Replacement Services</title>
         
@@ -33,7 +37,7 @@
         <div class="wrapper">
             <!-- Sidebar (only include if user is authenticated) -->
             {% if user.is_authenticated %}
-                {% include 'includes/adminsidebar.html' %}
+                
             {% endif %}
             
             <!-- Header -->
@@ -46,7 +50,7 @@
             </main>
 
             <!-- Footer -->
-            {% include 'includes/footer.html' %}
+            {% include 'includes/adminfooter.html' %}
         </div>
 
         <!-- Bootstrap core JS -->
