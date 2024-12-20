@@ -29,7 +29,7 @@ SECRET_KEY = config("SECRET_KEY", default="fallback-secret-key")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 
 # Application definition
@@ -66,14 +66,14 @@ EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "windowupgrades4u@gmail.com"
-EMAIL_HOST_PASSWORD = "paparayoncheck@yahoo.com"
+EMAIL_HOST_PASSWORD = "betjgwgmvriwhzrl"
 
 ROOT_URLCONF = "LPageToAdmin.urls"
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR, 'templates'],  # For project-level templates
+        "DIRS": [BASE_DIR, "templates"],  # For project-level templates
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -146,7 +146,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")  # For production use
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-LOGIN_REDIRECT_URL = '/admin-login/'
+LOGIN_REDIRECT_URL = "/admin-login/"
 LOGOUT_REDIRECT_URL = "home"
 
 LOGGING = {

@@ -40,7 +40,6 @@ class UserCreateForm(UserCreationForm):
         return self.cleaned_data["email"]
 
 
-# Order Model
 class Order(models.Model):
     STATUS_CHOICES = (
         ("pending", "Pending"),
@@ -70,15 +69,14 @@ class Project(models.Model):
 
 # Quote Model
 class Quote(models.Model):
-    email = models.EmailField()  # User email
-    name = models.CharField(max_length=100, blank=True, null=True)  # Optional name
-    phone = models.CharField(max_length=15, blank=True, null=True)  # Optional phone
-    requested_at = models.DateTimeField(
-        auto_now_add=True
-    )  # Automatically set timestamp
+    name = models.CharField(max_length=255)
+    email = models.EmailField()
+    phone = models.CharField(max_length=15, blank=True, null=True)
+    details = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.email
+        return f"{self.name} - {self.email}"
 
 
 class Lead(models.Model):
@@ -157,3 +155,23 @@ class Message(models.Model):
 
     def __str__(self):
         return f"{self.subject} ({'Read' if self.is_read else 'Unread'})"
+
+
+class QuoteForm(forms.ModelForm):
+    class Meta:
+        model = Quote
+        fields = ["name", "email", "phone", "details"]  # Align with model
+        widgets = {
+            "name": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Customer Name"}
+            ),
+            "email": forms.EmailInput(
+                attrs={"class": "form-control", "placeholder": "Customer Email"}
+            ),
+            "phone": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Customer Phone"}
+            ),
+            "details": forms.Textarea(
+                attrs={"class": "form-control", "placeholder": "Enter details"}
+            ),
+        }

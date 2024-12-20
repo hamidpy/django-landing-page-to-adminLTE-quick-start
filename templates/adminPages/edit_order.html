@@ -1,6 +1,6 @@
 {% extends 'base/adminbase.html' %}
+
 {% block content %}
-<div class="content-wrapper">
     <!-- Header Section -->
     <div class="content-header">
         <h1 class="m-0">Edit Order #{{ order.id }}</h1>
@@ -14,7 +14,7 @@
                     {% csrf_token %}
                     {{ form.as_p }}
                     <button type="submit" class="btn btn-success">Save Changes</button>
-                    <a href="{% url 'orders' %}" class="btn btn-secondary">Cancel</a>
+                    <a href="{% url 'edit-orders' %}" class="btn btn-secondary">Cancel</a>
                 </form>
             </div>
         </div>

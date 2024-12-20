@@ -1,5 +1,4 @@
 {% extends "base/adminbase.html" %}
-{% load static %}
 
 {% block content %}
 <!-- Page Header -->
@@ -26,7 +25,7 @@
         <!-- Key Metrics -->
         <div class="row">
             <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
-                <a href="{% url 'leads' %}">
+                <a href="{% url 'adminleads' %}">
                     <div class="card bg-info text-white shadow">
                         <div class="card-body text-center">
                             <h4><i class="fas fa-user-plus"></i> New Leads</h4>
@@ -35,16 +34,19 @@
                     </div>
                 </a>
             </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
-                <a href="{% url 'inbox' %}">
-                    <div class="card bg-primary text-white shadow">
-                        <div class="card-body text-center">
-                            <h4><i class="fas fa-envelope"></i> Inbox</h4>
-                            <h3>{{ metrics.unread_messages_count }}</h3>
-                        </div>
-                    </div>
-                </a>
+            <div class="row">
+
+<!-- Inbox Section -->
+<div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+    <a href="{% url 'inbox' %}">
+        <div class="card bg-primary text-white shadow">
+            <div class="card-body text-center">
+                <h4><i class="fas fa-envelope"></i> Inbox</h4>
+                <h3>{{ metrics.message_count }}</h3> <!-- Use message_count here -->
             </div>
+        </div>
+    </a>
+</div>
             <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
                 <a href="{% url 'pending_orders' %}">
                     <div class="card bg-warning text-white shadow">
@@ -90,6 +92,7 @@
         </div>
     </div>
 </div>
+
             <!-- Leads Section -->
             <div class="card mt-4 shadow">
                 <div class="card-header bg-primary text-white">

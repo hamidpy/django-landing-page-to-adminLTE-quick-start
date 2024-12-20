@@ -1,6 +1,5 @@
 from django.contrib import admin
-
-from .models import Lead, Order, Project, Quote
+from .models import Lead, Order, Project, Quote  # No need to add 'app'
 
 
 # Register your models here.
@@ -20,7 +19,8 @@ class ProjectAdmin(admin.ModelAdmin):
 
 @admin.register(Quote)
 class QuoteAdmin(admin.ModelAdmin):
-    list_display = ("email", "name", "phone")  # Use valid fields only
+    list_display = ("name", "email", "phone", "created_at")
+    search_fields = ("name", "email")
 
 
 @admin.register(Lead)

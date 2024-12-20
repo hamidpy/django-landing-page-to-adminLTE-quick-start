@@ -1,6 +1,6 @@
 {% extends 'base/adminbase.html' %}
+
 {% block content %}
-<div class="content-wrapper">
     <!-- Header Section -->
     <div class="content-header">
         <h1 class="m-0">Order Details</h1>
@@ -14,15 +14,19 @@
                 <h3 class="card-title">Order Information</h3>
             </div>
             <div class="card-body">
+                <!-- Order ID and Customer Name -->
+                <p><strong>Order ID:</strong> {{ order.id }}</p>
+                <p><strong>Customer Name:</strong> {{ order.customer_name }}</p>
+    
+                <!-- Other order details -->
                 <p><strong>Status:</strong> {{ order.status }}</p>
                 <p><strong>Amount:</strong> ${{ order.amount }}</p>
                 <p><strong>Date:</strong> {{ order.date|date:"M d, Y" }}</p>
             </div>
             <div class="card-footer">
-                <a href="{% url 'orders' %}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Orders</a>
+                <a href="{% url 'edit-orders' %}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Orders</a>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}
 

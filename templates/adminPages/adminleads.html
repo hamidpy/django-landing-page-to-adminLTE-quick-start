@@ -1,77 +1,133 @@
 {% extends 'base/adminbase.html' %}
 
 {% block content %}
+
+{% include 'includes/adminsidebar.html' %}
 <div class="container mt-5">
     <h1 class="mb-4 text-center text-primary">Leads Management</h1>
 
-    <!-- Card Wrapper -->
-    <div class="card shadow">
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h3 class="card-title"><i class="fas fa-users"></i> Leads</h3>
-            <a href="{% url 'submit_lead' %}" class="btn btn-light btn-sm">
-                {% csrf_token %}
-                <i class="fas fa-plus"></i> Add Lead
-            </a>
+    <!-- Add Lead Form -->
+    <div class="card shadow mb-4">
+        <div class="card-header bg-primary text-white">
+            <h3 class="card-title"><i class="fas fa-plus"></i> Add New Lead</h3>
         </div>
         <div class="card-body">
-            <!-- Table Container -->
-            <div class="table-responsive">
-                <table class="table table-striped table-hover table-bordered align-middle">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Service</th>
-                            <th>Status</th>
-                            <th>Created At</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for lead in leads %}
-                        <tr>
-                            <!-- Sequential Number -->
-                            <td>{{ forloop.counter }}</td>
-                
-                            <!-- Lead Name -->
-                            <td>{{ lead.name }}</td>
-                
-                            <!-- Lead Email -->
-                            <td>{{ lead.email }}</td>
-                
-                            <!-- Lead Phone -->
-                            <td>{{ lead.phone }}</td>
-                
-                            <!-- Service -->
-                            <td>{{ lead.service|title }}</td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                                <!-- Status with Dynamic Styling -->
-                                <td>
-                                    <span class="badge badge-pill 
-                                        {% if lead.status == 'new' %}badge-primary
-                                        {% elif lead.status == 'contacted' %}badge-warning
-                                        {% elif lead.status == 'converted' %}badge-success
-                                        {% else %}badge-secondary{% endif %}">
-                                        {{ lead.status|title }}
-                                    </span>
-                                </td>
-
-                                <!-- Created At -->
-                                <td>{{ lead.created_at|date:"d M Y H:i" }}</td>
-                            </tr>
-                        {% empty %}
-                            <tr>
-                                <td colspan="7" class="text-center text-muted">
-                                    <i class="fas fa-info-circle"></i> No leads available at the moment.
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            <!-- Display messages -->
+            {% if messages %}
+            <div class="mb-3">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
             </div>
+            {% endif %}
+            
+            <!-- Form -->
+            <form method="POST" action="{% url 'adminleads' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" name="name" id="name" class="form-control" placeholder="Enter full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" name="email" id="email" class="form-control" placeholder="Enter email address" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone:</label>
+                    <input type="tel" name="phone" id="phone" class="form-control" placeholder="Enter phone number" required>
+                </div>
+                <div class="form-group">
+                    <label for="service">Service:</label>
+                    <select name="service" id="service" class="form-control" required>
+                        <option value="window_replacement">Window Replacement</option>
+                        <option value="door_installation">Door Installation</option>
+                        <option value="roof_repair">Roof Repair</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Lead</button>
+            </form>
         </div>
+    </div>
 
-   
+    <!-- Leads Table -->
+<div class="card shadow">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h3 class="card-title"><i class="fas fa-users"></i> Existing Leads</h3>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover table-bordered align-middle">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Service</th>
+                        <th>Status</th>
+                        <th>Submitted On</th>
+                        <th>Action</th> <!-- New column for delete action -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for lead in leads %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ lead.name }}</td>
+                        <td>{{ lead.email }}</td>
+                        <td>{{ lead.phone }}</td>
+                        <td>{{ lead.service|title }}</td>
+                        <td>
+                            <span class="badge badge-pill 
+                                {% if lead.status == 'new' %}badge-primary
+                                {% elif lead.status == 'contacted' %}badge-warning
+                                {% elif lead.status == 'converted' %}badge-success
+                                {% else %}badge-secondary{% endif %}">
+                                {{ lead.status|title }}
+                            </span>
+                        </td>
+                        <td>{{ lead.created_at|date:"d M Y H:i" }}</td>
+                        <td>
+                            <!-- Pagination Controls -->
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; First</a>
+            <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+                            <!-- Delete Button -->
+                            <form method="POST" action="{% url 'delete_lead' lead.id %}" onsubmit="return confirm('Are you sure you want to delete this lead?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center text-muted">
+                            <i class="fas fa-info-circle"></i> No leads available at the moment.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

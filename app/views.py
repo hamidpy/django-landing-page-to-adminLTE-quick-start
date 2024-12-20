@@ -1,4 +1,3 @@
-
 import logging
 
 from django.contrib import messages
@@ -13,9 +12,11 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.timezone import now
 from django.views.decorators.csrf import csrf_exempt, csrf_protect  # Group csrf imports
-
+from django.http import HttpResponseRedirect
 from app.forms import OrderForm  # If OrderForm is used
 from app.models import Lead, Order, Quote
+
+
 
 from .forms import (
     LeadForm,
@@ -30,23 +31,56 @@ from .models import Lead, Message, Order, Project, Quote  # Ensure no duplicates
 logger = logging.getLogger(__name__)
 
 
-def HOME(request):
-    """Renders the landing page."""
+def home(request):
+    """
+    Handles GET and POST requests for the landing page:
+    - Saves quotes to the database
+    - Sends email confirmations
+    - Displays success messages
+    """
+    if request.method == "POST":
+        # Handle form submission
+        name = request.POST.get("name")
+        email = request.POST.get("email")
+        phone = request.POST.get("phone")
+        message = request.POST.get("message")
+
+        # Ensure all fields are populated
+        if not all([name, email, phone, message]):
+            messages.error(request, "Please fill out all fields.")
+            return render(request, "pages/index.html")
+
+        # Save to database
+        try:
+            Quote.objects.create(name=name, email=email, phone=phone, message=message)
+        except Exception as e:
+            messages.error(request, "Failed to save your data. Please try again later.")
+            print(f"Database error: {e}")
+            return render(request, "pages/index.html")
+
+        # Send email
+        try:
+            send_mail(
+                subject="Quote Request Received",
+                message=f"Thank you, {name}, for reaching out to us!",
+                from_email="your-email@example.com",  # Replace with your email
+                recipient_list=[email],
+            )
+        except Exception as e:
+            messages.error(
+                request, "Failed to send confirmation email. Please try again later."
+            )
+            print(f"Email error: {e}")
+            return render(request, "pages/index.html")
+
+        # Redirect back to the landing page with a success message
+        messages.success(
+            request, "Thank you for your request. We'll get back to you soon!"
+        )
+        return redirect("home")
+
+    # For GET requests, render the landing page
     return render(request, "pages/index.html")
-
-@csrf_protect
-def view_message(request, message_id):
-    """Handles viewing a specific message."""
-    # Retrieve the message by its ID or return 404 if not found
-    message = get_object_or_404(Message, id=message_id)
-
-    # Mark the message as read
-    if not message.is_read:
-        message.is_read = True
-        message.save()
-
-    # Render the message detail template
-    return render(request, "adminPages/adminmessage_detail.html", {"message": message})
 
 
 @csrf_protect
@@ -59,40 +93,10 @@ def inbox_view(request):
 
 
 @csrf_protect
-def orders_view(request):
-    """Handles rendering the Orders page."""
-    orders = Order.objects.all()
-    return render(request, "adminPages/adminorders.html", {"orders": orders})
-
-
-@csrf_protect
-def edit_order(request, order_id):
-    """Handles editing a specific order."""
-    order = get_object_or_404(Order, id=order_id)
-    if request.method == "POST":
-        form = OrderForm(request.POST, instance=order)
-        if form.is_valid():
-            form.save()
-            return redirect("orders")
-    else:
-        form = OrderForm(instance=order)
-    return render(
-        request, "adminPages/adminedit_order.html", {"form": form, "order": order}
-    )
-
-
-@csrf_protect
 def view_order(request, order_id):
     """Handles viewing a specific order."""
     order = get_object_or_404(Order, id=order_id)
     return render(request, "adminPages/adminorder_detail.html", {"order": order})
-
-
-@csrf_protect
-def quotes_view(request):
-    """Handles rendering the Quotes page."""
-    quotes = Quote.objects.all()
-    return render(request, "adminPages/adminquotes.html", {"quotes": quotes})
 
 
 @csrf_protect
@@ -111,75 +115,6 @@ def reports_view(request):
     return render(request, "adminPages/adminreports.html", context)
 
 
-from django.http import HttpResponseRedirect
-
-def submit_lead(request):
-    """Handles submission of a lead from the landing page."""
-    if request.method == "POST":
-        form = LeadForm(request.POST)
-        if form.is_valid():
-            # Save the form and print the submitted data
-            form.save()
-            form_data = request.POST  # Extract form data for debugging
-            print("Lead submitted:", form_data)  # Debug statement to log the form data
-            
-            # Redirect to success page
-            return HttpResponseRedirect('/')  # Redirect to the landing page
-        else:
-            # Handle invalid form data by re-rendering the form with errors
-            return render(request, "pages/index.html", {"form": form})
-    else:
-        # Render the form for GET requests
-        form = LeadForm()
-        return render(request, "pages/index.html", {"form": form})
-
-
-@csrf_protect
-def submit_quote(request):
-    if request.method == "POST":
-        # Use the QuoteForm to validate and save data
-        form = QuoteForm(request.POST)
-        if form.is_valid():
-            try:
-                # Save the form data to the database
-                quote = form.save()
-
-                # Success message
-                messages.success(
-                    request, "Your quote request has been submitted successfully!"
-                )
-
-                # Send email notification
-                try:
-                    send_mail(
-                        "New Quote Request",
-                        f"Name: {quote.name}\nEmail: {quote.email}\nPhone: {quote.phone}",
-                        "windowupgrades4u@gmail.com",  # From email
-                        ["paparayoncheck@gmail.com"],  # To email
-                    )
-                except Exception as e:
-                    logger.error(f"Error sending email: {e}")
-                    messages.warning(
-                        request,
-                        "Your quote was submitted, but we couldn't send a notification.",
-                    )
-
-                return redirect("/")  # Redirect to homepage or confirmation page
-            except Exception as e:
-                logger.error(f"Error saving quote: {e}")
-                messages.error(request, f"Error submitting quote: {e}")
-        else:
-            messages.error(
-                request,
-                "There was an error with your submission. Please correct the errors below.",
-            )
-    else:
-        form = QuoteForm()  # Display an empty form for GET requests
-
-    # Pass the form to the template
-    return render(request, "pages/submit_quote.html", {"form": form})
-
-
 @csrf_protect
 def add_message(request):
     if request.method == "POST":
@@ -189,16 +124,6 @@ def add_message(request):
         Message.objects.create(subject=subject, body=body)
         messages.success(request, "Message added successfully.")
         return redirect("inbox")
-
-
-@csrf_protect
-def delete_message(request, message_id):
-    try:
-        Message.objects.get(id=message_id).delete()
-        messages.success(request, "Message deleted successfully.")
-    except Message.DoesNotExist:
-        messages.error(request, "Message not found.")
-    return redirect("inbox")
 
 
 @csrf_protect
@@ -278,47 +203,6 @@ def privacy_policy(request):
 
 
 @csrf_protect
-def admin_submit_lead(request):
-    if request.method == "POST":
-        # Handle admin-specific logic for lead submission
-        ...
-    return render(request, "adminPages/submit_lead.html")
-
-
-@csrf_protect
-def admin_quotes_view(request):
-    quotes = Quote.objects.all()  # Fetch all quotes
-    return render(request, "adminPages/adminquotes.html", {"quotes": quotes})
-
-
-# views.py
-def request_quote_view(request):
-    if request.method == "POST":
-        email = request.POST.get("email")
-        name = request.POST.get("name", "Anonymous")  # Default to "Anonymous"
-        phone = request.POST.get("phone", None)  # Optional field
-
-        if Quote.objects.filter(email=email).exists():
-            messages.error(
-                request, "This email has already been used to submit a quote."
-            )
-        else:
-            try:
-                # Save the quote
-                Quote.objects.create(email=email, name=name, phone=phone)
-                # Redirect to the success page after processing the form
-                return redirect("quote-success")
-            except IntegrityError:
-                messages.error(
-                    request,
-                    "There was an error processing your request. Please try again.",
-                )
-
-        return redirect("quote-success")  # Redirect to the success page
-    return render(request, "pages/request_quote.html")  # Render the form page
-
-
-@csrf_protect
 def quote_success(request):
     return render(request, "pages/quote_success.html")  # Adjust path if necessary
 
@@ -344,17 +228,6 @@ def quick_lead_view(request):
     )  # Reload the user landing page with a success message
 
 
-@csrf_protect
-# Public Landing Page (Generic)
-def index(request):
-    """Renders the landing page with a form for users and a login link for admins."""
-    if request.method == "POST":
-        # Handle form submission for window replacement
-        # Form processing logic here (if applicable)
-        pass
-    return render(request, "pages/index.html")
-
-
 # Admin Login
 def admin_login(request):
     if request.method == "POST":
@@ -369,27 +242,6 @@ def admin_login(request):
                 request, "registration/login.html", {"error": "Invalid credentials"}
             )
     return render(request, "registration/login.html")  # Render login page
-
-
-def admin_leads_view(request):
-    leads = Lead.objects.all()  # Fetch all leads from the database
-    return render(request, "adminPages/adminleads.html", {"leads": leads})
-
-
-def admin_submit_lead_view(request):
-    # Logic for handling lead submissions by admins
-    if request.method == "POST":
-        # Handle form submission
-        pass
-    return render(request, "adminPages/adminsubmitlead.html")
-
-
-def admin_leads(request):
-    """Render the admin Leads page."""
-    leads = Lead.objects.all()  # Fetch all lead objects from the database
-    return render(
-        request, "adminPages/adminleads.html", {"leads": leads}
-    )  # Ensure this template path is correct
 
 
 @login_required  # Ensure only logged-in admins can access this view
@@ -410,6 +262,66 @@ def admin_signup(request):
         form = UserCreationForm()
 
     return render(request, "registration/signup.html", {"form": form})
+
+
+def submit_lead(request):
+    """
+    Handles lead submissions from frontend, saves to database, and sends email confirmation.
+    """
+    if request.method == "POST":
+        email = request.POST.get("email")
+        name = request.POST.get(
+            "name", "Anonymous"
+        )  # Default to 'Anonymous' if not provided
+        phone = request.POST.get("phone", None)
+
+        # Validate that email exists
+        if not email:
+            messages.error(request, "Email is required.")
+            return redirect("home")  # Redirect to landing page
+
+        # Check for duplicate email
+        if Lead.objects.filter(email=email).exists():
+            messages.error(request, "This email has already been submitted.")
+            return redirect("home")
+
+        try:
+            # Save the lead to the database
+            Lead.objects.create(name=name, email=email, phone=phone)
+
+            # Send confirmation email
+            subject = "Lead Submission Received"
+            message = f"Dear {name},\n\nThank you for submitting your details. We'll contact you soon.\n\nPhone: {phone}"
+            from_email = settings.DEFAULT_FROM_EMAIL
+            send_mail(subject, message, from_email, [email], fail_silently=True)
+
+            # Success message
+            messages.success(
+                request, "Thank you! Your details have been submitted successfully."
+            )
+            return redirect("home")  # Redirect back to landing page
+        except Exception as e:
+            print(f"Error saving lead or sending email: {e}")
+            messages.error(request, "An error occurred. Please try again later.")
+            return redirect("home")
+
+    # Render the landing page if GET request
+    return render(request, "pages/index.html")
+
+
+def request_quote(request):
+    if request.method == "POST":
+        form = QuoteForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Your quote request has been submitted!")
+            return redirect("home")  # Redirect to home page after submission
+        else:
+            messages.error(request, "There was an error submitting your request.")
+    else:
+        form = QuoteForm()
+    
+    return render(request, "pages/request_quote.html", {"form": form})
 
 
 # Admin Logout
