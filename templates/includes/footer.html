@@ -5,13 +5,13 @@
                 <div class="row">
                     <div class="col-lg-6 h-100 text-center text-lg-start my-auto">
                         <ul class="list-inline mb-2">
-                            <li class="list-inline-item"><a href="#!">About</a></li>
+                            <li class="list-inline-item"><a href="{% url 'about' %}">About</a></li>
                             <li class="list-inline-item">⋅</li>
-                            <li class="list-inline-item"><a href="#!">Contact</a></li>
+                            <li class="list-inline-item"><a href="{% url 'contact' %}">Contact</a></li>
                             <li class="list-inline-item">⋅</li>
-                            <li class="list-inline-item"><a href="#!">Terms of Use</a></li>
+                            <li class="list-inline-item"><a href="{% url 'terms_of_use' %}">Terms of Use</a></li>
                             <li class="list-inline-item">⋅</li>
-                            <li class="list-inline-item"><a href="#!">Privacy Policy</a></li>
+                            <li class="list-inline-item"><a href="{% url 'privacy_policy' %}">Privacy Policy</a></li>
                         </ul>
                         <p class="text-muted small mb-4 mb-lg-0">&copy; Your Website 2022. All Rights Reserved.</p>
                     </div>
@@ -31,3 +31,22 @@
                 </div>
             </div>
         </footer>
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand" href="{% url 'app:index' %}">Your Company</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="{% url 'app:about' %}">About</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'app:services' %}">Services</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'app:contact' %}">Contact</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'app:terms_of_use' %}">Terms of Use</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'app:privacy_policy' %}">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        

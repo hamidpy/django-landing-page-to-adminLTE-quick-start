@@ -1,0 +1,106 @@
+{% extends 'base/adminbase.html' %}
+
+{% block content %}
+    <!-- Header Section -->
+{% include 'includes/adminsidebar.html' %}
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    {% if view_mode == "pending" %}
+                        <h1>Pending Orders</h1>
+                        <p class="text-muted">View and manage all pending orders.</p>
+                    {% else %}
+                        <h1>All Orders</h1>
+                        <p class="text-muted">Manage and view all orders in one place.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Metrics Section -->
+    {% if view_mode == "pending" %}
+    <section class="content">
+        <div class="container-fluid">
+            <div class="alert alert-info text-center">
+                <h5>Total Pending Orders: {{ pending_orders_count }}</h5>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Orders List Section -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title">
+                        <i class="fas fa-shopping-cart"></i>
+                        {% if view_mode == "pending" %}
+                            Pending Orders
+                        {% else %}
+                            All Orders
+                        {% endif %}
+                    </h3>
+                </div>
+                <div class="card-body table-responsive p-0">
+                    {% if orders %}
+                    <table class="table table-striped table-hover table-bordered text-center">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Status</th>
+                                <th>Amount</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                            <tr>
+                                <td>{{ order.id }}</td>
+                                <td>{{ order.customer }}</td>
+                                <td>
+                                    {% if order.status == "pending" %}
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    {% elif order.status == "completed" %}
+                                        <span class="badge bg-success">Completed</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ order.status|title }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>${{ order.amount }}</td>
+                                <td>
+                                    <a href="{% url 'view_order' order.id %}" class="btn btn-info btn-sm">
+                                        <i class="fas fa-eye"></i> View
+                                    </a>
+                                    <a href="{% url 'edit_order' order.id %}" class="btn btn-warning btn-sm">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <form method="POST" action="{% url 'order_delete' order.id %}" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Are you sure you want to delete this order?');">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p class="text-center text-muted">
+                        {% if view_mode == "pending" %}
+                            <i class="fas fa-info-circle"></i> No pending orders at this time.
+                        {% else %}
+                            <i class="fas fa-info-circle"></i> No orders available.
+                        {% endif %}
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

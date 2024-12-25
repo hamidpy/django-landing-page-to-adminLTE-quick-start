@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>Submit a Lead</h2>
+    <form method="post" action="{% url 'submit_lead' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Submit Lead</button>
+    </form>
+</div>
+{% endblock %}
+

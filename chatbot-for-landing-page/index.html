@@ -1,0 +1,145 @@
+<title>Landing Page with Chatbot</title>
+<style>
+    /* Chat Container */
+    #chat-container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        background: linear-gradient(to bottom right, #ffffff, #e6f7ff);
+        border-radius: 15px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        font-family: 'Arial', sans-serif;
+    }
+
+    /* Chat Log */
+    #chat-log {
+        height: 400px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 15px;
+        background-color: #f9f9f9;
+    }
+
+    /* Chat Bubbles */
+    .user-message, .bot-message {
+        display: inline-block;
+        padding: 12px 15px;
+        border-radius: 15px;
+        margin: 10px 0;
+        max-width: 80%;
+        word-wrap: break-word;
+    }
+
+    /* User Message */
+    .user-message {
+        background-color: #4caf50;
+        color: #ffffff;
+        text-align: right;
+        float: right;
+        border-top-right-radius: 0;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Bot Message */
+    .bot-message {
+        background-color: #ffffff;
+        color: #333;
+        text-align: left;
+        float: left;
+        border-top-left-radius: 0;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e0e0e0;
+    }
+
+    /* Clearfix for Messages */
+    .clearfix {
+        clear: both;
+    }
+
+    /* User Input Section */
+    #user-input-container {
+        display: flex;
+        align-items: center;
+        border-top: 1px solid #ddd;
+        padding-top: 10px;
+    }
+
+    #user-input {
+        flex: 1;
+        padding: 12px 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        outline: none;
+        font-size: 16px;
+        margin-right: 10px;
+        transition: border 0.3s ease;
+    }
+
+    #user-input:focus {
+        border: 1px solid #4caf50;
+    }
+
+    /* Send Button */
+    button {
+        padding: 12px 20px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+        background-color: #45a049;
+        transform: scale(1.05);
+    }
+</style>
+</head>
+<body>
+    <h1>Welcome to My Landing Page</h1>
+
+    <!-- Chatbot UI -->
+    <<div id="chat-container">
+        <div id="chat-log">
+            <div class="bot-message">
+                Hi! How can I help you today?
+            </div>
+            <div class="clearfix"></div>
+            <div class="user-message">
+                I need assistance with my account.
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div id="user-input-container">
+            <input id="user-input" type="text" placeholder="Type your message here..." />
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+<script>
+    function sendMessage() {
+        const userInput = document.getElementById("user-input");
+        const chatLog = document.getElementById("chat-log");
+
+        if (userInput.value.trim() !== "") {
+            // Add user's message
+            const userMessage = document.createElement("div");
+            userMessage.className = "user-message";
+            userMessage.innerText = userInput.value;
+            chatLog.appendChild(userMessage);
+
+            // Add bot's reply
+            const botMessage = document.createElement("div");
+            botMessage.className = "bot-message";
+            botMessage.innerText = "Thank you for your message!";
+            chatLog.appendChild(botMessage);
+
+            // Clear input
+            userInput.value = "";
+            chatLog.scrollTop = chatLog.scrollHeight;
+        }
+    }
+</script>

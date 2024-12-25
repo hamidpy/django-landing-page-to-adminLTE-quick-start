@@ -1,0 +1,27 @@
+{% extends "base/adminbase.html" %}
+
+{% block content %}
+{% include 'includes/adminsidebar.html' %}
+<h1>Monthly Revenue</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Month</th>
+            <th>Revenue</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for data in revenue_data %}
+        <tr>
+            <td>{{ data.month }}</td>
+            <td>${{ data.total|floatformat:2 }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="2">No revenue data available</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
